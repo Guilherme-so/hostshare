@@ -101,9 +101,11 @@ const Categories = () => {
   const params = useSearchParams();
   const category = params?.get("category");
   const pathname = usePathname();
-  const isMainPage = pathname === "/";
 
-  if (!isMainPage) {
+  const isMainPage = pathname === "/";
+  const searchPage = pathname === '/search'
+
+  if (!isMainPage && !searchPage) {
     return null;
   }
 
