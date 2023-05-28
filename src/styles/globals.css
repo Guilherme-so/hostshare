@@ -23,3 +23,30 @@ body,
   font-size: 16px !important;
   width: 100% !important;
 }
+
+.animeBottomToTop {
+  opacity: 0;
+  transform: translateY(+300px);
+  animation: animeLeft 0.5s forwards;
+}
+
+@keyframes animeLeft {
+  to {
+    opacity: initial;
+    transform: initial;
+  }
+}
+
+dialog:modal {
+  max-width: 100vw;
+  max-height: 100vw;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: hidden;
+}
