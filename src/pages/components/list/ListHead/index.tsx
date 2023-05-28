@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Heading from "../../Heading";
 import Photos from "../../Icons/photos";
-import Modal from "../../GalleryModal";
+import Modal from "../../Modals/GalleryModal";
 import ChevronLeft from "../../Icons/chevronLeft";
 
 export default function ListHead({ data }: { data: any }) {
@@ -13,6 +13,7 @@ export default function ListHead({ data }: { data: any }) {
     <>
       <Modal
         className="animeBottomToTop bg-white w-screen h-screen"
+
         showModal={showModal}
         setShowModal={setShowModal}
       >
@@ -25,9 +26,9 @@ export default function ListHead({ data }: { data: any }) {
           <div></div>
         </div>
 
-        <div className="w-full px-10 h-[90vh] grid grid-cols-1  gap-4 m-auto md:grid-cols-2 mt-10 overflow-y-scroll">
+        <div className="loading w-full px-10 h-[90vh] grid grid-cols-1  gap-4 m-auto md:grid-cols-2 mt-10 overflow-y-scroll">
           {data?.info?.images?.data.map((picture: any, index: number) => (
-            <div className="w-full h-[60vh] relative bg-slate-400">
+            <div className="image w-full h-[60vh] relative bg-slate-400">
               <Image
                 src={picture.url}
                 fill
@@ -66,13 +67,13 @@ export default function ListHead({ data }: { data: any }) {
             alt="Image"
           />
         </div>
-        <div className="w-full relative hidden  md:grid md:grid-cols-2  md:gap-2">
+        <div className="loading w-full relative hidden  md:grid md:grid-cols-2  md:gap-2">
           {data?.info?.images?.data
             ?.filter((it: any, index: number) => index <= 4)
             .map((picture: any, index: number) => {
               if (index > 0) {
                 return (
-                  <div className="w-full relative bg-slate-400">
+                  <div className="image w-full relative">
                     <Image
                       src={picture.url}
                       fill

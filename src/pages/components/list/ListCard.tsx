@@ -1,10 +1,10 @@
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LikeButton from "../Like";
 
 const ListCard = ({ data }: { data: any }) => {
   const router = useRouter();
-  console.log(data);
 
   return (
     <div
@@ -12,15 +12,7 @@ const ListCard = ({ data }: { data: any }) => {
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
-        <div
-          className="
-            aspect-square 
-            w-full 
-            relative 
-            overflow-hidden 
-            rounded-xl
-          "
-        >
+        <div className="aspect-square w-full relative overflow-hidden rounded-xl">
           <Image
             fill
             className="
