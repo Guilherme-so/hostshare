@@ -13,8 +13,10 @@ module.exports = {
       colors: {
         mainColor: "#329a9a",
       },
+      gridTemplateColumns: {
+        'custom': "2fr, 1.2fr",
+      },
     },
   },
   plugins: [],
-}
-
+};
