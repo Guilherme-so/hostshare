@@ -1,26 +1,40 @@
 import { GetServerSideProps } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../components/Container";
+import ListHead from "../components/list/ListHead";
+import ListInfo from "../components/list/ListInfo";
+import ListReservation from "../components/list/ListReservation";
+import { Range } from "react-date-range";
+import { differenceInDays, eachDayOfInterval } from "date-fns";
+
+const initialDateRange = {
+  startDate: new Date(),
+  endDate: new Date(),
+  key: "selection",
+};
 
 const ListingPage = ({ data }: { data: any }) => {
   console.log(data);
+  const [totalPrice, setTotalPrice] = useState(data?.info.price);
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+
+  useEffect(() => {
+    if (dateRange.startDate && dateRange.endDate) {
+      const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
+
+      if (dayCount && data?.info.price) {
+        setTotalPrice(dayCount * data?.info.price);
+      } else {
+        setTotalPrice(data?.info.price);
+      }
+    }
+  }, [dateRange, data?.info.price]);
 
   return (
     <Container>
-      {/* <div
-        className="
-        max-w-screen-lg 
-        mx-auto
-      "
-      >
+      <div>
         <div className="flex flex-col gap-6">
-          <ListingHead
-            title={listing.title}
-            imageSrc={listing.imageSrc}
-            locationValue={listing.locationValue}
-            id={listing.id}
-            currentUser={currentUser}
-          />
+          <ListHead data={data} />
           <div
             className="
             grid 
@@ -30,15 +44,7 @@ const ListingPage = ({ data }: { data: any }) => {
             mt-6
           "
           >
-            <ListingInfo
-              user={listing.user}
-              category={category}
-              description={listing.description}
-              roomCount={listing.roomCount}
-              guestCount={listing.guestCount}
-              bathroomCount={listing.bathroomCount}
-              locationValue={listing.locationValue}
-            />
+            <ListInfo data={data} />
             <div
               className="
               order-first 
@@ -47,28 +53,24 @@ const ListingPage = ({ data }: { data: any }) => {
               md:col-span-3
             "
             >
-              <ListingReservation
-                price={listing.price}
+              <ListReservation
+                data={data}
                 totalPrice={totalPrice}
                 onChangeDate={(value) => setDateRange(value)}
                 dateRange={dateRange}
-                onSubmit={onCreateReservation}
-                disabled={isLoading}
-                disabledDates={disabledDates}
               />
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </Container>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-
   const url =
-    "https://file.notion.so/f/s/24643894-e5c3-4c40-974a-52594f581e03/listings.json?id=f795dab6-14d4-48a9-9567-c72151d311a2&table=block&spaceId=f2ea7328-64a4-4f18-bacc-df6c9ac3d888&expirationTimestamp=1685215979593&signature=pABV_JxGSsBZg2ie91bnEcQgxj0_WI7wSe8ScfO20Pk&downloadName=listings.json";
+    "https://file.notion.so/f/s/24643894-e5c3-4c40-974a-52594f581e03/listings.json?id=f795dab6-14d4-48a9-9567-c72151d311a2&table=block&spaceId=f2ea7328-64a4-4f18-bacc-df6c9ac3d888&expirationTimestamp=1685305926635&signature=ugEcSyhZUFrHgWuVAsrg4jpxn84O5fdx58sCoqsV7WI&downloadName=listings.json";
 
   const resp = await fetch(url);
   const data = await resp.json();
