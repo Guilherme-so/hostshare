@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 import { MedalOutLine } from "../../Icons/medal";
 import Key from "../../Icons/key";
 import Calendar from "../../Icons/calendar";
-const Map = dynamic(() => import("../../Map"), {
+
+//@ts-ignore
+const Map = dynamic(() => import("../../../Map"), {
   ssr: false,
 });
 
@@ -27,7 +29,10 @@ export default function ListInfo({ data }: { data: any }) {
           "
         >
           <div>Hosted by {data?.info?.host?.name ?? "unknown"}</div>
-          <Avatar link={data?.info?.host?.avatar?.url} isSuperUser={isSuperUser} />
+          <Avatar
+            link={data?.info?.host?.avatar?.url}
+            isSuperUser={isSuperUser}
+          />
         </div>
         <div
           className="

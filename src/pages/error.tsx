@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import EmptyState from "./components/EmptyState";
+import EmptyState from "../components/EmptyState";
 
 export default function Error({ error }: { error: Error }) {
   useEffect(() => {

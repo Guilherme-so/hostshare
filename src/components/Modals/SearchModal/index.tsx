@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
-import useSearchModal from "../../../../hooks/useSearchModal";
+import useSearchModal from "../../../hooks/useSearchModal";
 import Modal from "../modal";
 import { Range } from "react-date-range";
 import dynamic from "next/dynamic";
@@ -33,14 +33,6 @@ export default function SearchModal() {
     endDate: new Date(),
     key: "selection",
   });
-
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("../../Map"), {
-        ssr: false,
-      }),
-    [location]
-  );
 
   const onBack = useCallback(() => {
     setStep((value) => value - 1);

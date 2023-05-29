@@ -1,3 +1,4 @@
+'use client'
 import L from "leaflet";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 
@@ -23,10 +24,7 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const attribution =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-const Map: React.FC<MapProps> = ({
-  center,
-  className = "h-[35vh] rounded-lg",
-}) => {
+const Map = ({ center, className = "h-[35vh] rounded-lg" }: MapProps) => {
   return (
     <MapContainer
       center={(center as L.LatLngExpression) || [51, -0.09]}

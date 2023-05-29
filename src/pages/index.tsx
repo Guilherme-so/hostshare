@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
-import Container from "./components/Container";
-import ListCard from "./components/list/ListCard";
+import Container from "../components/Container";
+import ListCard from "../components/list/ListCard";
 
 interface HomeProps {
   data: any;
@@ -24,8 +24,8 @@ const Home = ({ data }: HomeProps) => {
       >
         {data
           ?.filter((it: any, index: number) => index < 20)
-          .map((item: any) => (
-            <ListCard key={item.id} data={item} />
+          .map((item: any,index:number) => (
+            <ListCard key={index} data={item} />
           ))}
       </div>
     </Container>

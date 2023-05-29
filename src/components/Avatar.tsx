@@ -7,7 +7,7 @@ export default function Avatar({
   isSuperUser,
 }: {
   link?: string;
-  isSuperUser: boolean;
+  isSuperUser?: boolean;
 }) {
   console.log(isSuperUser);
   return (

@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
-import Container from "../components/Container";
-import ListHead from "../components/list/ListHead";
-import ListInfo from "../components/list/ListInfo";
-import ListReservation from "../components/list/ListReservation";
+import Container from "../../components/Container";
+import ListHead from "../../components/list/ListHead";
+import ListInfo from "../../components/list/ListInfo";
+import ListReservation from "../../components/list/ListReservation";
 import { Range } from "react-date-range";
 import { differenceInDays, eachDayOfInterval } from "date-fns";
 

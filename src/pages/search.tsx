@@ -1,12 +1,16 @@
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import ListCard from "./components/list/ListCard";
+import ListCard from "../components/list/ListCard";
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
-import EmptyState from "./components/EmptyState";
-const Map = dynamic(() => import("./components/Map"), {
+import EmptyState from "../components/EmptyState";
+
+//@ts-ignore
+const Map = dynamic(() => import("../Map"), {
   ssr: false,
 });
+
+
 export default function Search({ data }: { data: any }) {
   const params = useSearchParams();
   const [filteredData, setFilteredData] = useState<any>([]);

@@ -1,5 +1,5 @@
 import { BiSearch } from "react-icons/bi";
-import useSearchModal from "../../../hooks/useSearchModal";
+import useSearchModal from "../../hooks/useSearchModal";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { differenceInDays } from "date-fns";

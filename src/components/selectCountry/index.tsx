@@ -1,5 +1,5 @@
 import Select from 'react-select'
-import useCountries from '../../../hooks/useCountries';
+import useCountries from '../../hooks/useCountries';
 
 
 export type CountrySelectValue = {

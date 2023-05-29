@@ -13,7 +13,6 @@ export default function ListHead({ data }: { data: any }) {
     <>
       <Modal
         className="animeBottomToTop bg-white w-screen h-screen"
-
         showModal={showModal}
         setShowModal={setShowModal}
       >
@@ -28,7 +27,10 @@ export default function ListHead({ data }: { data: any }) {
 
         <div className="loading w-full px-10 h-[90vh] grid grid-cols-1  gap-4 m-auto md:grid-cols-2 mt-10 overflow-y-scroll">
           {data?.info?.images?.data.map((picture: any, index: number) => (
-            <div className="image w-full h-[60vh] relative bg-slate-400">
+            <div
+              key={index}
+              className="image w-full h-[60vh] relative bg-slate-400"
+            >
               <Image
                 src={picture.url}
                 fill
@@ -73,7 +75,7 @@ export default function ListHead({ data }: { data: any }) {
             .map((picture: any, index: number) => {
               if (index > 0) {
                 return (
-                  <div className="image w-full relative">
+                  <div key={index} className="image w-full relative">
                     <Image
                       src={picture.url}
                       fill
