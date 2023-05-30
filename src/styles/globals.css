@@ -8,6 +8,10 @@ body,
   height: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .leaflet-bottom,
 .leaflet-control,
 .leaflet-pane,
@@ -23,7 +27,6 @@ body,
   font-size: 16px !important;
   width: 100% !important;
 }
-
 
 /* smoth modal from bottom to top */
 
@@ -55,7 +58,6 @@ dialog::backdrop {
   max-height: calc(100vh - 210px);
   overflow-y: hidden;
 }
-
 
 /* skeleton */
 
@@ -91,4 +93,81 @@ dialog::backdrop {
   min-height: 4rem;
   border-radius: 4px;
   animation-delay: 0.06s;
+}
+
+/* pagination */
+
+.paginationBttns {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.paginationBttns li {
+  margin: 0;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+}
+
+.paginationBttns a {
+  width: 100%;
+  height: 100%;
+  color: black;
+  background-color: white;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginationBttns a:hover {
+  color: black;
+  background-color: lightgray;
+}
+
+.paginationActive a {
+  color: white;
+  background-color: black;
+}
+
+.paginationActive a:hover {
+  color: white;
+  background-color: black;
+}
+
+.paginationDisabled a {
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+.paginationDisabled a:hover {
+  background-color: lightgray;
+}
+
+.previousBttn {
+  display: flex;
+}
+
+.nextBttn {
+  display: flex;
+}
+
+.nextBttn svg {
+  rotate: 180deg;
+}
+
+.breakLabel a {
+  background-color: transparent;
+  cursor: default;
+}
+
+.breakLabel a:hover {
+  background-color: transparent;
 }

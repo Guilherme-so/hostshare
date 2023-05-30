@@ -1,23 +1,34 @@
+import { useState } from "react";
 import Container from "../components/Container";
 import ListCard from "../components/list/ListCard";
 import Loading from "@/components/Loading";
 import EmptyState from "@/components/EmptyState";
+import Pagination from "@/components/Pagination";
 import useSWR from "swr";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
   const { data: lista, error, isLoading } = useSWR("/api/staticdata", fetcher);
 
-  if (lista === undefined && isLoading) {
-    return <Loading />;
-  }
+  const [pageNumber, setPageNumber] = useState(0);
+  const [itemsPerPage] = useState(10);
 
-  if (error) <EmptyState />;
+  const currentPage = pageNumber * itemsPerPage;
+  const pageCount = Math.ceil(lista?.data.length / itemsPerPage);
+
+  const changePage = ({ selected }: { selected: any }) => {
+    setPageNumber(selected);
+  };
 
   return (
     <Container>
-      <div
-        className="
+      {lista === undefined && isLoading ? (
+        <Loading />
+      ) : error ? (
+        <EmptyState />
+      ) : (
+        <div
+          className="
           pt-24
           grid 
           grid-cols-1 
@@ -28,13 +39,15 @@ const Home = () => {
           2xl:grid-cols-6
           gap-8
         "
-      >
-        {lista?.data
-          ?.filter((it: any, index: number) => index < 20)
-          .map((item: any, index: number) => (
-            <ListCard key={index} data={item} />
-          ))}
-      </div>
+        >
+          {lista?.data
+            .slice(currentPage, currentPage + itemsPerPage)
+            .map((item: any, index: number) => {
+              return <ListCard key={index} data={item} />;
+            })}
+        </div>
+      )}
+      {lista && <Pagination changePage={changePage} pageCount={pageCount} />}
     </Container>
   );
 };

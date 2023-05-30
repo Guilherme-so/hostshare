@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import EmptyState from "../components/EmptyState";
 import useSWR from "swr";
 import Loading from "@/components/Loading";
+import Pagination from "@/components/Pagination";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 //@ts-ignore
@@ -13,16 +14,17 @@ const Map = dynamic(() => import("../Map"), {
 });
 
 export default function Search() {
-  const { data: lista, error, isLoading } = useSWR("/api/staticdata", fetcher);
-
   const params = useSearchParams();
-  const [filteredData, setFilteredData] = useState<any>([]);
-  const [cordinate, setCordinate] = useState<any>([]);
-
   const location = params?.get("locationValue");
   const guests = params?.get("guestCount");
   const rooms = params?.get("roomCount");
   const bathrooms = params?.get("bathroomCount");
+
+  const { data: lista, error, isLoading } = useSWR("/api/staticdata", fetcher);
+  const [filteredData, setFilteredData] = useState<any>([]);
+  const [cordinate, setCordinate] = useState<any>([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [itemsPerPage] = useState(6);
 
   useEffect(() => {
     if (filteredData) {
@@ -48,17 +50,25 @@ export default function Search() {
 
       setFilteredData(newData);
     }
-  }, [location,lista]);
+  }, [location, lista]);
 
   if (lista === undefined && isLoading) {
     return <Loading />;
   }
 
-  if (filteredData  && filteredData.length === 0) {
+  if (filteredData && filteredData.length === 0) {
     return <EmptyState />;
   }
 
   if (error) <EmptyState />;
+
+  // Pagination
+  const currentPage = pageNumber * itemsPerPage;
+  const pageCount = Math.ceil(filteredData?.length / itemsPerPage);
+
+  const changePage = ({ selected }: { selected: any }) => {
+    setPageNumber(selected);
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-custom">
@@ -76,9 +86,11 @@ export default function Search() {
         gap-8
       "
         >
-          {filteredData?.map((item: any, index: number) => (
-            <ListCard key={index} data={item} />
-          ))}
+          {filteredData
+            ?.slice(currentPage, currentPage + itemsPerPage)
+            .map((item: any, index: number) => (
+              <ListCard key={index} data={item} />
+            ))}
         </div>
       </div>
 
@@ -90,6 +102,8 @@ export default function Search() {
           />
         )}
       </div>
+
+      <Pagination changePage={changePage} pageCount={pageCount} />
     </div>
   );
 }
