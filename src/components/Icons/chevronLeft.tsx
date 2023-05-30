@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ChevronLeft() {
+export default function ChevronLeft({className}: {className?:string}) {
   return (
     <svg
       viewBox="0 0 32 32"
@@ -8,7 +8,7 @@ export default function ChevronLeft() {
       aria-hidden="true"
       role="presentation"
       focusable="false"
-      className="block h-4 w-4 fill-black stroke-black stroke-[4px] overflow-visible"
+      className={`block h-4 w-4 fill-black stroke-black stroke-[4px] overflow-visible ${className}`}
     >
       <g fill="none">
         <path d="m20 28-11.29289322-11.2928932c-.39052429-.3905243-.39052429-1.0236893 0-1.4142136l11.29289322-11.2928932"></path>

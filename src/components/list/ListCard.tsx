@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LikeButton from "../Like";
+import ImageSlider from "../ImageSlider";
 
 const ListCard = ({ data }: { data: any }) => {
   const router = useRouter();
+  const [showButtonsSlide, setShowButtonsSlide] = useState(false);
 
   return (
     <div
@@ -12,19 +14,12 @@ const ListCard = ({ data }: { data: any }) => {
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
-        <div className="aspect-square w-full relative overflow-hidden rounded-xl">
-          <Image
-            fill
-            className="
-              object-cover 
-              h-full 
-              w-full 
-              group-hover:scale-110 
-              transition
-            "
-            src={data.info.mainImage.url}
-            alt="Listing"
-          />
+        <div
+          onMouseEnter={() => setShowButtonsSlide(true)}
+          onMouseLeave={() => setShowButtonsSlide(false)}
+          className="aspect-square w-full relative overflow-hidden rounded-xl"
+        >
+          <ImageSlider showBottons={showButtonsSlide} slides={data?.info.images.data} />
           <div
             className="
             absolute
