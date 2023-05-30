@@ -1,11 +1,15 @@
-import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Range } from "react-date-range";
+import { differenceInDays, eachDayOfInterval } from "date-fns";
 import Container from "../../components/Container";
 import ListHead from "../../components/list/ListHead";
 import ListInfo from "../../components/list/ListInfo";
 import ListReservation from "../../components/list/ListReservation";
-import { Range } from "react-date-range";
-import { differenceInDays, eachDayOfInterval } from "date-fns";
+import Loading from "@/components/Loading";
+import EmptyState from "@/components/EmptyState";
+import useSWR from "swr";
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const initialDateRange = {
   startDate: new Date(),
@@ -13,72 +17,73 @@ const initialDateRange = {
   key: "selection",
 };
 
-const ListingPage = ({ data }: { data: any }) => {
-  const [totalPrice, setTotalPrice] = useState(data?.info.price);
+const ListingPage = () => {
+  const { id } = useRouter().query;
+  const { data: lista, error, isLoading } = useSWR("/api/staticdata", fetcher);
+  const [data, setData] = useState<any>(null);
+
+  const [totalPrice, setTotalPrice] = useState(data && data?.info.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+
+  useEffect(() => {
+    if (id !== undefined && lista !== undefined) {
+      setData(lista?.data.find((item: any) => item.info.id === id[0]));
+    }
+  }, [id, lista]);
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
       const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate);
 
-      if (dayCount && data?.info.price) {
+      if (dayCount && data !== null) {
         setTotalPrice(dayCount * data?.info.price);
       } else {
-        setTotalPrice(data?.info.price);
+        setTotalPrice(data && data?.info.price);
       }
     }
   }, [dateRange, data?.info.price]);
 
   return (
     <Container>
-      <div>
-        <div className="flex flex-col gap-6">
-          <ListHead data={data} />
-          <div
-            className="
-            grid 
-            grid-cols-1 
-            md:grid-cols-7 
-            md:gap-10 
-            mt-6
-          "
-          >
-            <ListInfo data={data} />
+      {data ? (
+        <div>
+          <div className="flex flex-col gap-6">
+            <ListHead data={data && data} />
             <div
               className="
-              order-first 
-              mb-10 
-              md:order-last 
-              md:col-span-3
+              grid
+              grid-cols-1
+              md:grid-cols-7
+              md:gap-10
+              mt-6
             "
             >
-              <ListReservation
-                data={data}
-                totalPrice={totalPrice}
-                onChangeDate={(value) => setDateRange(value)}
-                dateRange={dateRange}
-              />
+              <ListInfo data={data && data} />
+              <div
+                className="
+                order-first
+                mb-10
+                md:order-last
+                md:col-span-3
+              "
+              >
+                <ListReservation
+                  data={data && data}
+                  totalPrice={totalPrice}
+                  onChangeDate={(value) => setDateRange(value)}
+                  dateRange={dateRange}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : isLoading ? (
+        <Loading />
+      ) : error ? (
+        <EmptyState />
+      ) : null}
     </Container>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query;
-  const url =
-  "https://file.notion.so/f/s/24643894-e5c3-4c40-974a-52594f581e03/listings.json?id=f795dab6-14d4-48a9-9567-c72151d311a2&table=block&spaceId=f2ea7328-64a4-4f18-bacc-df6c9ac3d888&expirationTimestamp=1685392903052&signature=PZvFgkKIJ-uKtRBNFeoDMNWoDehT3KR08FXrCrK2lrc&downloadName=listings.json";
-
-  const resp = await fetch(url);
-  const data = await resp.json();
-
-  return {
-    props: {
-      data: id && data.data.find((item: any) => item.info.id === id[0]),
-    },
-  };
 };
 
 export default ListingPage;

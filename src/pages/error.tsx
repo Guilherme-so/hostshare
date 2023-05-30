@@ -3,11 +3,8 @@ import EmptyState from "../components/EmptyState";
 
 export default function Error({ error }: { error: Error }) {
   useEffect(() => {
-    console.log(error);
+    console.error(error);
   }, [error]);
 
-  return <EmptyState 
-  title="uh oh"
-  subtitle="Something went wrong!"
-  />;
+  return <EmptyState title="uh oh" subtitle="Something went wrong!" />;
 }

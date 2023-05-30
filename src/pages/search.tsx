@@ -1,17 +1,20 @@
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import ListCard from "../components/list/ListCard";
-import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import EmptyState from "../components/EmptyState";
+import useSWR from "swr";
+import Loading from "@/components/Loading";
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 //@ts-ignore
 const Map = dynamic(() => import("../Map"), {
   ssr: false,
 });
 
+export default function Search() {
+  const { data: lista, error, isLoading } = useSWR("/api/staticdata", fetcher);
 
-export default function Search({ data }: { data: any }) {
   const params = useSearchParams();
   const [filteredData, setFilteredData] = useState<any>([]);
   const [cordinate, setCordinate] = useState<any>([]);
@@ -39,17 +42,23 @@ export default function Search({ data }: { data: any }) {
 
   useEffect(() => {
     if (location) {
-      const newData = data?.filter((item: any) =>
+      const newData = lista?.data?.filter((item: any) =>
         searchSensitiveLocation(item.info.location.city)
       );
 
       setFilteredData(newData);
     }
-  }, [location]);
+  }, [location,lista]);
 
-  if (filteredData.length === 0) {
+  if (lista === undefined && isLoading) {
+    return <Loading />;
+  }
+
+  if (filteredData  && filteredData.length === 0) {
     return <EmptyState />;
   }
+
+  if (error) <EmptyState />;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-custom">
@@ -84,16 +93,3 @@ export default function Search({ data }: { data: any }) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const url =
-    "https://file.notion.so/f/s/24643894-e5c3-4c40-974a-52594f581e03/listings.json?id=f795dab6-14d4-48a9-9567-c72151d311a2&table=block&spaceId=f2ea7328-64a4-4f18-bacc-df6c9ac3d888&expirationTimestamp=1685392903052&signature=PZvFgkKIJ-uKtRBNFeoDMNWoDehT3KR08FXrCrK2lrc&downloadName=listings.json";
-  const resp = await fetch(url);
-  const data = await resp.json();
-
-  return {
-    props: {
-      data: data.data,
-    },
-  };
-};

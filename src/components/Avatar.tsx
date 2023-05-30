@@ -9,7 +9,6 @@ export default function Avatar({
   link?: string;
   isSuperUser?: boolean;
 }) {
-  console.log(isSuperUser);
   return (
     <div className="relative">
       <Image

@@ -7,7 +7,6 @@ import ChevronLeft from "../../Icons/chevronLeft";
 
 export default function ListHead({ data }: { data: any }) {
   const [showModal, setShowModal] = useState(false);
-  console.log(data);
 
   return (
     <>
